@@ -15,20 +15,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class BootController {
 	
 	@Autowired
-	private Service service;
+	private AircraftService service;
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/addAircrafts")
-	public void addAircraft(@RequestBody Aircraft aircraft) {
-		service.addAircraft(aircraft);
-	}
+	@Autowired
+	private NewsService newsservice;
 	
-	@RequestMapping("/getAircrafts")
-	public ArrayList<Aircraft> getAircrafts() {
-		return new ArrayList<Aircraft>();
+	
+	@RequestMapping("/aircrafts/{programName}")
+	public ArrayList<Aircraft> getAircrafts(@PathVariable String programName) {
+		return service.getAircrafts(programName);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/aircrafts/{programName}")
 	public void addAircraftInDB(@RequestBody Aircraft aircraft, @PathVariable String programName) {
 		service.addAircraftInDB(aircraft, programName);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/news")
+	public void addNewsInDB(@RequestBody News news) {
+		newsservice.addNewsInDB(news);
+	}
+	
+	@RequestMapping("/news")
+	public ArrayList<News> getAllNews() {
+		return newsservice.getAllNewsFromDB();
 	}
 }
